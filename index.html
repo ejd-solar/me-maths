@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b2545"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="ME Maths">
+<title>Marine Engineering Maths Trainer</title><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png">
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 -apple-system,system-ui,Segoe UI,Roboto,sans-serif;background:#eef2f7;color:#13233a}
+header{background:#0b2545;color:#fff;padding:calc(env(safe-area-inset-top) + 14px) 16px 14px}header h1{margin:0;font-size:1.2rem}header p{margin:4px 0 0;opacity:.8;font-size:.85rem}
+main{max-width:720px;margin:0 auto;padding:12px 12px calc(env(safe-area-inset-bottom) + 24px)}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:sticky;top:0;background:#eef2f7;padding:8px 0;z-index:2}
+nav button{padding:10px 4px;font-size:.9rem}nav button.on{background:#0b2545;color:#fff;border-color:#0b2545}
+button{font:inherit;border:1px solid #9fb0c8;background:#fff;color:#0b2545;border-radius:10px;padding:10px 14px;margin:4px 4px 4px 0;cursor:pointer}button:disabled{opacity:.5}
+button.pri{background:#1d6fd8;color:#fff;border-color:#1d6fd8;font-weight:600}
+section{background:#fff;border-radius:14px;padding:14px 16px;margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}h2{margin:0 0 6px;font-size:1.2rem}h3{margin:0 0 8px;font-size:1.05rem}
+.eq{font-family:Georgia,serif;font-size:1.15rem;background:#f1f6ff;border-left:4px solid #1d6fd8;padding:10px 12px;border-radius:6px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0}dt{font-weight:700}dd{margin:0}
+label{display:block;font-weight:600;margin:8px 0}.sel select,input{display:block;width:100%;font:inherit;padding:12px;border:1px solid #9fb0c8;border-radius:10px;margin-top:4px;background:#fff}
+.ex{border-top:1px solid #e3e8ef;padding-top:8px;margin-top:8px}.steps{padding-left:1.4em}.steps li{margin:4px 0}.q{font-size:1.05rem}.meta{color:#5a6b82;font-size:.9rem}
+.c{border-radius:10px;padding:10px 12px;margin:10px 0}.info{background:#e8f1ff}.ok{background:#e3f6e8}.warn{background:#fff3dc}.about{font-size:.85rem}
+.bar{margin:8px 0}.bar i{color:#5a6b82;font-style:normal;font-size:.85rem}.bar div{background:#e3e8ef;border-radius:6px;height:10px}.bar b{display:block;height:10px;background:#1d6fd8;border-radius:6px}
+</style></head><body><header><h1>Marine Engineering Maths Trainer</h1><p>Learn each topic step by step, practise with fresh questions, then test yourself. You've got this!</p></header>
+<main id="app"></main><script>
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+const r = (x, dp) => {
+  const f = Math.pow(10, dp);
+  return Math.round(x * f) / f;
+};
+const G = {
+  transpose: () => {
+    const t = ri(0, 2);
+    if (t === 0) {
+      const V = ri(12, 440), R = pick([2, 4, 5, 8, 10, 20, 25]);
+      return { q: `Using V = I \xD7 R, a heater circuit has V = ${V} V and R = ${R} \u03A9. Transpose for I and find the current.`, ans: r(V / R, 2), unit: "A", hint: "Divide both sides by R to get I on its own.", sol: `Start: V = I \xD7 R. Divide both sides by R: I = V \xF7 R. Substitute: I = ${V} \xF7 ${R} = ${r(V / R, 2)} A` };
+    }
+    if (t === 1) {
+      const F = ri(2, 40) * 100, A = pick([0.02, 0.05, 0.1, 0.25, 0.5]);
+      return { q: `Using P = F \xF7 A, a hydraulic ram needs pressure P = ${F} Pa acting on A = ${A} m\xB2. Transpose for F and find the force.`, ans: r(F * A, 2), unit: "N", hint: "Multiply both sides by A.", sol: `Start: P = F \xF7 A. Multiply both sides by A: F = P \xD7 A. Substitute: F = ${F} \xD7 ${A} = ${r(F * A, 2)} N` };
+    }
+    const u = ri(0, 10), a = ri(1, 5), t2 = ri(2, 12), v = u + a * t2;
+    return { q: `Using v = u + a\xB7t, a pump shaft speeds up from u = ${u} m/s to v = ${v} m/s with a = ${a} m/s\xB2. Transpose for t and find the time.`, ans: t2, unit: "s", hint: "Subtract u from both sides, then divide by a.", sol: `Start: v = u + a\xB7t. Subtract u from both sides: v \u2212 u = a\xB7t. Divide both sides by a: t = (v \u2212 u) \xF7 a. Substitute: t = (${v} \u2212 ${u}) \xF7 ${a} = ${v - u} \xF7 ${a} = ${t2} s` };
+  },
+  fdp: () => {
+    const t = ri(0, 2);
+    if (t === 0) {
+      const cap = ri(20, 90) * 100, p = pick([15, 20, 25, 35, 40, 60, 65, 75, 85]);
+      return { q: `A fuel tank holds ${cap} litres when full. It is ${p}% full. How many litres are in it?`, ans: r(cap * p / 100, 2), unit: "L", hint: "Turn the percentage into a decimal (\xF7100) and multiply.", sol: `Convert: ${p}% = ${p} \xF7 100 = ${p / 100}. Multiply: ${cap} \xD7 ${p / 100} = ${r(cap * p / 100, 2)} L` };
+    }
+    if (t === 1) {
+      const d = pick([2, 4, 5, 8]), n = ri(1, d - 1);
+      return { q: `A gauge needle sits at ${n}/${d} of full scale. Write this as a percentage.`, ans: r(n / d * 100, 2), unit: "%", hint: "Divide top by bottom, then \xD7 100.", sol: `Divide: ${n} \xF7 ${d} = ${n / d}. Multiply by 100: ${n / d} \xD7 100 = ${r(n / d * 100, 2)}%` };
+    }
+    const old = ri(20, 80) * 10, inc = pick([5, 10, 12, 15, 20]);
+    return { q: `A generator's output of ${old} kW rises by ${inc}%. What is the new output?`, ans: r(old * (1 + inc / 100), 2), unit: "kW", hint: `Multiply by 1 + ${inc}/100.`, sol: `Multiplier: 1 + ${inc} \xF7 100 = ${1 + inc / 100}. Multiply: ${old} \xD7 ${1 + inc / 100} = ${r(old * (1 + inc / 100), 2)} kW` };
+  },
+  ratio: () => {
+    const t = ri(0, 1);
+    if (t === 0) {
+      const a = ri(1, 4), b = ri(a + 1, 9), tot = (a + b) * ri(2, 20);
+      return { q: `Glycol coolant is mixed water : glycol = ${b} : ${a}. How many litres of glycol in ${tot} L of mix?`, ans: tot * a / (a + b), unit: "L", hint: `Total parts = ${a + b}. Find one part first.`, sol: `Total parts: ${b} + ${a} = ${a + b}. One part: ${tot} \xF7 ${a + b} = ${tot / (a + b)} L. Glycol: ${a} \xD7 ${tot / (a + b)} = ${tot * a / (a + b)} L` };
+    }
+    const T = ri(10, 60), D = pick([2, 3, 4]);
+    return { q: `A drive gear has ${T} teeth and the driven gear has ${T * D} teeth. If the driver turns at ${D * 300} rev/min, what speed is the driven gear?`, ans: 300, unit: "rev/min", hint: "Speed ratio is the inverse of the teeth ratio: N2 = N1 \xD7 T1 \xF7 T2.", sol: `Formula: N2 = N1 \xD7 T1 \xF7 T2. Substitute: N2 = ${D * 300} \xD7 ${T} \xF7 ${T * D}. Work out: ${D * 300 * T} \xF7 ${T * D} = 300 rev/min` };
+  },
+  units: () => {
+    const t = ri(0, 3);
+    if (t === 0) {
+      const kw = ri(5, 900) / 10;
+      return { q: `Convert ${kw} kW to watts.`, ans: r(kw * 1e3, 2), unit: "W", hint: "kilo = \xD7 1000.", sol: `Kilo means 1000, so multiply by 1000. ${kw} \xD7 1000 = ${r(kw * 1e3, 2)} W` };
+    }
+    if (t === 1) {
+      const mm = ri(50, 2500);
+      return { q: `Convert ${mm} mm to metres.`, ans: mm / 1e3, unit: "m", hint: "1 m = 1000 mm, so \xF7 1000.", sol: `There are 1000 mm in a metre, so divide by 1000. ${mm} \xF7 1000 = ${mm / 1e3} m` };
+    }
+    if (t === 2) {
+      const bar = ri(2, 40);
+      return { q: `A lube oil system runs at ${bar} bar. Convert to kPa (1 bar = 100 kPa).`, ans: bar * 100, unit: "kPa", hint: "Multiply by 100.", sol: `1 bar = 100 kPa, so multiply by 100. ${bar} \xD7 100 = ${bar * 100} kPa` };
+    }
+    const m3 = ri(2, 150) / 10;
+    return { q: `Convert ${m3} m\xB3 to litres.`, ans: r(m3 * 1e3, 2), unit: "L", hint: "1 m\xB3 = 1000 litres.", sol: `1 m\xB3 = 1000 L, so multiply by 1000. ${m3} \xD7 1000 = ${r(m3 * 1e3, 2)} L` };
+  },
+  stdform: () => {
+    const t = ri(0, 1);
+    if (t === 0) {
+      const m = ri(11, 99) / 10, e = ri(3, 7);
+      return { q: `Write ${m} \xD7 10^${e} as an ordinary number.`, ans: r(m * Math.pow(10, e), 0), unit: "", hint: `Move the decimal point ${e} places right.`, sol: `The power is +${e}, so the number is big. Move the decimal point ${e} places to the right, filling gaps with zeros. Answer: ${r(m * Math.pow(10, e), 0)}` };
+    }
+    const a = ri(2, 9), b = ri(2, 9), e1 = ri(2, 5), e2 = ri(-3, -1);
+    const v = a * b * Math.pow(10, e1 + e2);
+    return { q: `A current of ${a} \xD7 10^${e2} A flows through ${b} \xD7 10^${e1} \u03A9. Find V = I \xD7 R (as a normal number).`, ans: r(v, 4), unit: "V", hint: "Multiply the front numbers, add the powers.", sol: `Multiply the front numbers: ${a} \xD7 ${b} = ${a * b}. Add the powers: ${e2} + ${e1} = ${e1 + e2}. Combine: V = ${a * b} \xD7 10^${e1 + e2} = ${r(v, 4)} V` };
+  },
+  area: () => {
+    const t = ri(0, 2);
+    if (t === 0) {
+      const l = ri(2, 8), w = ri(2, 6), h = ri(1, 4);
+      return { q: `A rectangular double-bottom tank is ${l} m \xD7 ${w} m \xD7 ${h} m. What is its capacity in litres?`, ans: l * w * h * 1e3, unit: "L", hint: "Volume = l \xD7 w \xD7 h in m\xB3, then \xD7 1000 for litres.", sol: `Volume: ${l} \xD7 ${w} \xD7 ${h} = ${l * w * h} m\xB3. Convert: ${l * w * h} \xD7 1000 = ${l * w * h * 1e3} L` };
+    }
+    if (t === 1) {
+      const d2 = ri(10, 40) / 10, h = ri(2, 6);
+      const v = Math.PI * (d2 / 2) ** 2 * h;
+      return { q: `A cylindrical fresh water tank has diameter ${d2} m and height ${h} m. Find its volume in m\xB3 (2 d.p.).`, ans: r(v, 2), unit: "m\xB3", hint: "V = \u03C0 r\xB2 h, and r = d \xF7 2.", sol: `Radius: r = ${d2} \xF7 2 = ${d2 / 2} m. Square it: ${d2 / 2}\xB2 = ${r((d2 / 2) ** 2, 4)}. Multiply: \u03C0 \xD7 ${r((d2 / 2) ** 2, 4)} \xD7 ${h} = ${r(v, 2)} m\xB3` };
+    }
+    const d = ri(50, 300);
+    const a = Math.PI * (d / 2) ** 2;
+    return { q: `Find the area of a pipe bore of diameter ${d} mm (to the nearest mm\xB2).`, ans: Math.round(a), unit: "mm\xB2", hint: "A = \u03C0 d\xB2 \xF7 4.", sol: `Square the diameter: ${d}\xB2 = ${d * d}. Multiply by \u03C0: ${r(Math.PI * d * d, 1)}. Divide by 4: ${Math.round(a)} mm\xB2`, tol: 2e-3 };
+  },
+  pressure: () => {
+    const t = ri(0, 1);
+    if (t === 0) {
+      const F = ri(2, 50) * 1e3, A = pick([0.01, 0.02, 0.04, 0.05, 0.1]);
+      return { q: `A force of ${F} N acts on a piston of area ${A} m\xB2. What pressure in kPa?`, ans: r(F / A / 1e3, 2), unit: "kPa", hint: "P = F \xF7 A gives Pa; \xF7 1000 for kPa.", sol: `Formula: P = F \xF7 A. Substitute: ${F} \xF7 ${A} = ${r(F / A, 2)} Pa. Convert: \xF7 1000 = ${r(F / A / 1e3, 2)} kPa` };
+    }
+    const h = ri(2, 15);
+    return { q: `What is the pressure at the bottom of a seawater tank ${h} m deep? Use \u03C1 = 1025 kg/m\xB3, g = 9.81 m/s\xB2. Answer in kPa (1 d.p.).`, ans: r(1025 * 9.81 * h / 1e3, 1), unit: "kPa", hint: "P = \u03C1 g h, then \xF7 1000.", sol: `Formula: P = \u03C1 \xD7 g \xD7 h. Substitute: 1025 \xD7 9.81 \xD7 ${h} = ${r(1025 * 9.81 * h, 1)} Pa. Convert: \xF7 1000 = ${r(1025 * 9.81 * h / 1e3, 1)} kPa` };
+  },
+  ohm: () => {
+    const t = ri(0, 2);
+    if (t === 0) {
+      const I2 = ri(2, 20), R2 = ri(2, 50);
+      return { q: `A motor winding of ${R2} \u03A9 draws ${I2} A. What voltage is across it?`, ans: I2 * R2, unit: "V", hint: "V = I \xD7 R.", sol: `Formula: V = I \xD7 R. Substitute: V = ${I2} \xD7 ${R2} = ${I2 * R2} V` };
+    }
+    if (t === 1) {
+      const V = pick([24, 110, 230, 440]), I2 = ri(2, 30);
+      return { q: `A ${V} V supply feeds a load drawing ${I2} A. What power is used (in W)?`, ans: V * I2, unit: "W", hint: "P = V \xD7 I.", sol: `Formula: P = V \xD7 I. Substitute: P = ${V} \xD7 ${I2} = ${V * I2} W` };
+    }
+    const I = ri(2, 15), R = ri(2, 20);
+    return { q: `A ${R} \u03A9 heater element carries ${I} A. What power does it dissipate?`, ans: I * I * R, unit: "W", hint: "P = I\xB2 \xD7 R.", sol: `Formula: P = I\xB2 \xD7 R. Square the current: ${I}\xB2 = ${I * I}. Multiply: ${I * I} \xD7 ${R} = ${I * I * R} W` };
+  },
+  trig: () => {
+    const t = ri(0, 1), ang = pick([20, 25, 30, 35, 40, 45, 50, 60]), L2 = ri(2, 12);
+    const rad = ang * Math.PI / 180;
+    if (t === 0) return { q: `A ladder ${L2} m long leans at ${ang}\xB0 to the deck. How high up the bulkhead does it reach? (2 d.p.)`, ans: r(L2 * Math.sin(rad), 2), unit: "m", hint: "Height is opposite the angle, ladder is the hypotenuse: use sin.", sol: `Label: hypotenuse = ${L2} m, want the opposite. SOH: sin \u03B8 = O \xF7 H, so O = H \xD7 sin \u03B8. Substitute: ${L2} \xD7 sin ${ang}\xB0 = ${L2} \xD7 ${r(Math.sin(rad), 4)} = ${r(L2 * Math.sin(rad), 2)} m` };
+    return { q: `A pipe run rises at ${ang}\xB0 over a horizontal distance of ${L2} m. How much does it rise? (2 d.p.)`, ans: r(L2 * Math.tan(rad), 2), unit: "m", hint: "Opposite and adjacent: use tan.", sol: `Label: adjacent = ${L2} m, want the opposite. TOA: tan \u03B8 = O \xF7 A, so O = A \xD7 tan \u03B8. Substitute: ${L2} \xD7 tan ${ang}\xB0 = ${L2} \xD7 ${r(Math.tan(rad), 4)} = ${r(L2 * Math.tan(rad), 2)} m` };
+  },
+  pyth: () => {
+    const tr = pick([[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [7, 24, 25], [9, 12, 15]]), k = pick([1, 2, 10, 100]), t = ri(0, 1);
+    const a = tr[0] * k, b = tr[1] * k, c = tr[2] * k;
+    if (t === 0) return { q: `A cable is run diagonally across a compartment ${a} cm by ${b} cm. How long is the diagonal?`, ans: c, unit: "cm", hint: "c\xB2 = a\xB2 + b\xB2.", sol: `Formula: c\xB2 = a\xB2 + b\xB2. Square: ${a}\xB2 + ${b}\xB2 = ${a * a} + ${b * b} = ${a * a + b * b}. Square root: \u221A${a * a + b * b} = ${c} cm` };
+    return { q: `A brace is ${c} mm long and spans ${a} mm horizontally. How far does it go vertically?`, ans: b, unit: "mm", hint: "b\xB2 = c\xB2 \u2212 a\xB2.", sol: `Rearrange: b\xB2 = c\xB2 \u2212 a\xB2. Square: ${c}\xB2 \u2212 ${a}\xB2 = ${c * c} \u2212 ${a * a} = ${c * c - a * a}. Square root: \u221A${c * c - a * a} = ${b} mm` };
+  },
+  graphs: () => {
+    const m = ri(2, 9), c = ri(0, 40), x1 = ri(1, 5), x2 = x1 + ri(2, 6), t = ri(0, 1);
+    if (t === 0) return { q: `A temperature-vs-time graph goes from (${x1} min, ${m * x1 + c} \xB0C) to (${x2} min, ${m * x2 + c} \xB0C). What is the gradient (\xB0C per min)?`, ans: m, unit: "\xB0C/min", hint: "Gradient = rise \xF7 run = (y2 \u2212 y1) \xF7 (x2 \u2212 x1).", sol: `Rise: ${m * x2 + c} \u2212 ${m * x1 + c} = ${m * (x2 - x1)}. Run: ${x2} \u2212 ${x1} = ${x2 - x1}. Gradient: ${m * (x2 - x1)} \xF7 ${x2 - x1} = ${m}` };
+    const x = ri(2, 20);
+    return { q: `A pump's head line is y = ${m}x + ${c}. What is y when x = ${x}?`, ans: m * x + c, unit: "", hint: "Substitute x into the equation.", sol: `Substitute x = ${x}: y = ${m} \xD7 ${x} + ${c}. Multiply first: ${m * x} + ${c}. Add: y = ${m * x + c}` };
+  },
+  averages: () => {
+    const n = ri(4, 6), v = Array.from({ length: n }, () => ri(60, 95));
+    const s = v.reduce((a, b) => a + b, 0);
+    const t = ri(0, 1);
+    if (t === 0) return { q: `Bearing temperatures (\xB0C) over ${n} rounds: ${v.join(", ")}. Find the mean (1 d.p.).`, ans: r(s / n, 1), unit: "\xB0C", hint: "Add them up and divide by how many there are.", sol: `Add: ${v.join(" + ")} = ${s}. Count: ${n} readings. Divide: ${s} \xF7 ${n} = ${r(s / n, 1)} \xB0C` };
+    const o = [...v].sort((a, b) => a - b);
+    return { q: `Bearing temperatures (\xB0C): ${v.join(", ")}. What is the range?`, ans: o[n - 1] - o[0], unit: "\xB0C", hint: "Range = highest \u2212 lowest.", sol: `Highest: ${o[n - 1]}. Lowest: ${o[0]}. Range: ${o[n - 1]} \u2212 ${o[0]} = ${o[n - 1] - o[0]} \xB0C` };
+  },
+  ma: () => {
+    const t = ri(0, 1);
+    if (t === 0) {
+      const E = ri(5, 40) * 10, MA2 = ri(2, 8);
+      return { q: `A chain block lifts a ${E * MA2} N load with an effort of ${E} N. What is the mechanical advantage?`, ans: MA2, unit: "", hint: "MA = load \xF7 effort.", sol: `Formula: MA = load \xF7 effort. Substitute: ${E * MA2} \xF7 ${E} = ${MA2} (no units)` };
+    }
+    const MA = ri(2, 6), VR = MA + ri(1, 4);
+    return { q: `A lifting tackle has MA = ${MA} and velocity ratio VR = ${VR}. What is its efficiency in %? (1 d.p.)`, ans: r(MA / VR * 100, 1), unit: "%", hint: "Efficiency = MA \xF7 VR \xD7 100.", sol: `Formula: \u03B7 = MA \xF7 VR \xD7 100. Divide: ${MA} \xF7 ${VR} = ${r(MA / VR, 4)}. Times 100: ${r(MA / VR * 100, 1)}%` };
+  },
+  temp: () => {
+    const t = ri(0, 2);
+    if (t === 0) {
+      const C2 = ri(-10, 120);
+      return { q: `Convert ${C2} \xB0C to kelvin.`, ans: C2 + 273, unit: "K", hint: "K = \xB0C + 273.", sol: `Formula: K = \xB0C + 273. Substitute: ${C2} + 273 = ${C2 + 273} K` };
+    }
+    if (t === 1) {
+      const C2 = ri(0, 40) * 5;
+      return { q: `An exhaust thermometer reads ${C2} \xB0C. Convert to \xB0F.`, ans: r(C2 * 9 / 5 + 32, 1), unit: "\xB0F", hint: "\xB0F = \xB0C \xD7 9/5 + 32.", sol: `Formula: \xB0F = \xB0C \xD7 1.8 + 32. Multiply: ${C2} \xD7 1.8 = ${r(C2 * 1.8, 1)}. Add 32: ${r(C2 * 9 / 5 + 32, 1)} \xB0F` };
+    }
+    const F = ri(40, 250);
+    const C = r((F - 32) * 5 / 9, 1);
+    return { q: `Convert ${F} \xB0F to \xB0C (1 d.p.).`, ans: C, unit: "\xB0C", hint: "\xB0C = (\xB0F \u2212 32) \xD7 5/9.", sol: `Formula: \xB0C = (\xB0F \u2212 32) \xD7 5 \xF7 9. Subtract 32 first: ${F} \u2212 32 = ${F - 32}. Times 5 \xF7 9: ${F - 32} \xD7 5 \xF7 9 = ${C} \xB0C` };
+  },
+  flow: () => {
+    const t = ri(0, 1);
+    if (t === 0) {
+      const V = ri(5, 60), Q2 = pick([5, 10, 15, 20, 25, 30]);
+      return { q: `A ballast pump moves ${Q2} m\xB3/h. How many minutes to empty a ${V * Q2 / 10} m\xB3 tank?`, ans: r(V * 6, 2), unit: "min", hint: "Time = volume \xF7 flow rate (gives hours), then \xD7 60.", sol: `Formula: t = V \xF7 Q. Substitute: ${V * Q2 / 10} \xF7 ${Q2} = ${V / 10} h. Convert to minutes: ${V / 10} \xD7 60 = ${r(V * 6, 2)} min` };
+    }
+    const d = pick([0.05, 0.1, 0.15, 0.2]), vel = ri(1, 4);
+    const Q = Math.PI * (d / 2) ** 2 * vel;
+    return { q: `Seawater flows at ${vel} m/s through a pipe of bore ${d} m. Find the flow rate in m\xB3/s (4 d.p.).`, ans: r(Q, 4), unit: "m\xB3/s", hint: "Q = A \xD7 v, with A = \u03C0 d\xB2 \xF7 4.", sol: `Area: A = \u03C0 \xD7 ${d}\xB2 \xF7 4 = ${r(Math.PI * d * d / 4, 5)} m\xB2. Formula: Q = A \xD7 v. Multiply: ${r(Math.PI * d * d / 4, 5)} \xD7 ${vel} = ${r(Q, 4)} m\xB3/s`, tol: 0.01 };
+  }
+};
+const ex = (t, ...s) => ({ t, s });
+const L = {
+  transpose: { name: "Transposition of formulae", why: "Every engineering formula can be rearranged to find whichever value you are missing.", formula: "v = u + a\xB7t  \u2192  t = (v \u2212 u) \xF7 a", symbols: [["Subject", "The letter on its own on the left"], ["Inverse operation", "+ undoes \u2212, \xD7 undoes \xF7, \u221A undoes \xB2"]], rearrange: ["Circle the letter you want.", "Undo what is furthest away from it first (usually + or \u2212).", "Then undo \xD7 or \xF7.", "Then undo powers or roots.", "Whatever you do to one side, do to the other."], method: ["Write the formula.", "Rearrange for the unknown before putting numbers in.", "Substitute the numbers.", "Calculate and add units."], examples: [ex("Easy: V = I \xD7 R, find R when V = 230 V, I = 5 A", "Divide both sides by I: R = V \xF7 I", "R = 230 \xF7 5 = 46 \u03A9"), ex("Medium: P = F \xF7 A, find A when F = 600 N, P = 3000 Pa", "Multiply by A: P \xD7 A = F", "Divide by P: A = F \xF7 P", "A = 600 \xF7 3000 = 0.2 m\xB2"), ex("Harder: P = I\xB2R, find I when P = 2000 W, R = 5 \u03A9", "Divide by R: I\xB2 = P \xF7 R = 400", "Square root: I = \u221A400 = 20 A")], mistakes: ["Only doing an operation to one side.", "Dividing before taking away (undo + and \u2212 first).", "Forgetting the square root when the unknown is squared."] },
+  fdp: { name: "Fractions, decimals and percentages", why: "Tank levels, efficiencies and load changes are all percentages.", formula: "% \u2192 decimal: \xF7 100;  fraction \u2192 decimal: top \xF7 bottom", symbols: [["%", "Out of 100"], ["Multiplier", "1 + % \xF7 100 for an increase, 1 \u2212 % \xF7 100 for a decrease"]], rearrange: ["Percentage = part \xF7 whole \xD7 100", "Part = whole \xD7 % \xF7 100", "Whole = part \xF7 (% \xF7 100)"], method: ["Turn the percentage into a decimal.", "Multiply by the amount.", "For increase or decrease, use the multiplier in one step."], examples: [ex("Easy: 25% of 8000 L", "25 \xF7 100 = 0.25", "0.25 \xD7 8000 = 2000 L"), ex("Medium: 3/8 as a %", "3 \xF7 8 = 0.375", "0.375 \xD7 100 = 37.5%"), ex("Harder: 450 kW falls by 12%", "Multiplier = 1 \u2212 0.12 = 0.88", "450 \xD7 0.88 = 396 kW")], mistakes: ["Using 12 instead of 0.12.", "Adding 12 to the number instead of 12%.", "Dividing the wrong way round in a fraction."] },
+  ratio: { name: "Ratio and proportion", why: "Mixing coolants and working out gear and pulley speeds.", formula: "N1 \xD7 T1 = N2 \xD7 T2", symbols: [["N", "Speed in rev/min"], ["T", "Number of teeth (or pulley diameter)"], ["a : b", "a parts to b parts"]], rearrange: ["N2 = N1 \xD7 T1 \xF7 T2", "T2 = N1 \xD7 T1 \xF7 N2"], method: ["Add the parts to get total parts.", "Divide the total by the parts to get one part.", "Multiply one part by what you need."], examples: [ex("Easy: split 60 L in 2 : 1", "3 parts; one part = 20 L", "40 L and 20 L"), ex("Medium: 7 : 3 water : glycol in 200 L", "10 parts; one part = 20 L", "Glycol = 3 \xD7 20 = 60 L"), ex("Harder: 20-tooth gear at 1500 rev/min drives a 60-tooth gear", "N2 = 1500 \xD7 20 \xF7 60", "N2 = 500 rev/min")], mistakes: ["Dividing by one side instead of total parts.", "Thinking a bigger gear turns faster (it turns slower)."] },
+  units: { name: "SI units and conversions", why: "Mixing mm and m, or kW and W, is the most common source of wrong answers.", formula: "k = \xD7 10\xB3,  M = \xD7 10\u2076,  m (milli) = \xD7 10\u207B\xB3", symbols: [["m", "metre (length)"], ["kg", "kilogram (mass)"], ["N", "newton (force)"], ["Pa", "pascal = N/m\xB2"], ["W", "watt (power)"], ["bar", "100 kPa"]], rearrange: ["Big unit \u2192 small unit: multiply.", "Small unit \u2192 big unit: divide."], method: ["Write the conversion factor.", "Decide: multiply or divide?", "Check the answer makes sense."], examples: [ex("Easy: 2.5 kW to W", "\xD7 1000 = 2500 W"), ex("Medium: 450 mm to m", "\xF7 1000 = 0.45 m"), ex("Harder: 0.2 m\xB2 to mm\xB2", "1 m\xB2 = 1 000 000 mm\xB2 (1000\xB2)", "0.2 \xD7 1 000 000 = 200 000 mm\xB2")], mistakes: ["Using 1000 for area conversions (it's 1000\xB2 for m\xB2 to mm\xB2).", "Multiplying when going to a bigger unit."] },
+  stdform: { name: "Powers of ten and standard form", why: "Very large or tiny values: megawatts, milliamps, microfarads.", formula: "a \xD7 10\u207F, with 1 \u2264 a < 10", symbols: [["a", "The front number"], ["n", "How many places the decimal point moves"]], rearrange: ["Multiply: multiply fronts, add powers.", "Divide: divide fronts, subtract powers."], method: ["Positive power: move the point right.", "Negative power: move the point left.", "Tidy up so the front is between 1 and 10."], examples: [ex("Easy: 3.2 \xD7 10\xB3", "Move point 3 right: 3200"), ex("Medium: 4.7 \xD7 10\u207B\xB3", "Move point 3 left: 0.0047"), ex("Harder: (2 \xD7 10\u207B\xB3) \xD7 (6 \xD7 10\u2074)", "Fronts: 2 \xD7 6 = 12", "Powers: \u22123 + 4 = 1", "12 \xD7 10\xB9 = 120")], mistakes: ["Multiplying the powers instead of adding them.", "Moving the point the wrong way for negative powers."] },
+  area: { name: "Area, volume and tank capacity", why: "Sounding tanks, sizing pipes and working out fuel and water stocks.", formula: "Cylinder V = \u03C0 r\xB2 h;  Box V = l \xD7 w \xD7 h", symbols: [["r", "Radius = diameter \xF7 2"], ["h", "Height or length"], ["\u03C0", "3.142"], ["1 m\xB3", "1000 litres"]], rearrange: ["h = V \xF7 (\u03C0 r\xB2)", "Circle area also = \u03C0 d\xB2 \xF7 4"], method: ["Get all lengths into the same unit (metres).", "Find the area of the end.", "Multiply by height or length.", "Convert m\xB3 to litres if needed."], examples: [ex("Easy: 3 m \xD7 2 m \xD7 1.5 m tank", "V = 9 m\xB3 = 9000 L"), ex("Medium: circle d = 100 mm", "A = \u03C0 \xD7 100\xB2 \xF7 4 = 7854 mm\xB2"), ex("Harder: cylinder d = 2 m, h = 3 m", "r = 1 m", "V = \u03C0 \xD7 1\xB2 \xD7 3 = 9.42 m\xB3 = 9425 L")], mistakes: ["Using diameter instead of radius in \u03C0 r\xB2.", "Mixing mm and m in one sum."] },
+  pressure: { name: "Pressure and force", why: "Hydraulics, tank heads and gauge readings.", formula: "P = F \xF7 A;  P = \u03C1 g h", symbols: [["P", "Pressure (Pa)"], ["F", "Force (N)"], ["A", "Area (m\xB2)"], ["\u03C1", "Density (kg/m\xB3), seawater about 1025"], ["g", "9.81 m/s\xB2"], ["h", "Depth (m)"]], rearrange: ["F = P \xD7 A", "A = F \xF7 P", "h = P \xF7 (\u03C1 g)"], method: ["Get force in N and area in m\xB2.", "Use the formula.", "Convert Pa to kPa (\xF7 1000) or bar (\xF7 100 000)."], examples: [ex("Easy: 500 N on 0.1 m\xB2", "P = 5000 Pa = 5 kPa"), ex("Medium: 2 bar on 0.05 m\xB2 piston", "2 bar = 200 000 Pa", "F = 200 000 \xD7 0.05 = 10 000 N"), ex("Harder: 6 m of fresh water (\u03C1 = 1000)", "P = 1000 \xD7 9.81 \xD7 6 = 58 860 Pa = 58.9 kPa")], mistakes: ["Area in cm\xB2 or mm\xB2 instead of m\xB2.", "Forgetting bar \u2194 Pa conversion."] },
+  ohm: { name: "Ohm's law and electrical power", why: "Fault-finding on motors, heaters and supplies.", formula: "V = I \xD7 R;  P = V \xD7 I = I\xB2 R = V\xB2 \xF7 R", symbols: [["V", "Voltage (volts)"], ["I", "Current (amps)"], ["R", "Resistance (ohms, \u03A9)"], ["P", "Power (watts)"]], rearrange: ["I = V \xF7 R", "R = V \xF7 I", "I = P \xF7 V"], method: ["Write down what you know.", "Pick the formula that uses those values.", "Rearrange, substitute, add units."], examples: [ex("Easy: I = 4 A, R = 30 \u03A9", "V = 4 \xD7 30 = 120 V"), ex("Medium: 230 V, 2.3 kW heater, current?", "I = P \xF7 V = 2300 \xF7 230 = 10 A"), ex("Harder: same heater's resistance", "R = V \xF7 I = 230 \xF7 10 = 23 \u03A9", "Check: I\xB2R = 100 \xD7 23 = 2300 W \u2713")], mistakes: ["Leaving kW as kW in the sum.", "Forgetting to square I in I\xB2R."] },
+  trig: { name: "Basic trigonometry", why: "Angles of pipework, ladders, slings and slopes.", formula: "SOH CAH TOA", symbols: [["O", "Opposite the angle"], ["A", "Adjacent (next to the angle)"], ["H", "Hypotenuse (longest side)"], ["\u03B8", "The angle"]], rearrange: ["O = H \xD7 sin \u03B8", "A = H \xD7 cos \u03B8", "O = A \xD7 tan \u03B8", "\u03B8 = sin\u207B\xB9(O \xF7 H)"], method: ["Label the sides from the angle.", "Choose SOH, CAH or TOA from what you have and want.", "Rearrange and use the calculator in degree mode."], examples: [ex("Easy: H = 10, \u03B8 = 30\xB0, find O", "O = 10 \xD7 sin 30\xB0 = 5"), ex("Medium: A = 4 m, \u03B8 = 45\xB0, find O", "O = 4 \xD7 tan 45\xB0 = 4 m"), ex("Harder: O = 3, H = 6, find \u03B8", "sin \u03B8 = 0.5", "\u03B8 = sin\u207B\xB9 0.5 = 30\xB0")], mistakes: ["Calculator in radians.", "Labelling sides from the wrong angle."] },
+  pyth: { name: "Pythagoras", why: "Diagonal pipe runs, cable lengths and braces.", formula: "c\xB2 = a\xB2 + b\xB2", symbols: [["c", "Hypotenuse, opposite the right angle"], ["a, b", "The two shorter sides"]], rearrange: ["c = \u221A(a\xB2 + b\xB2)", "a = \u221A(c\xB2 \u2212 b\xB2)"], method: ["Find the longest side.", "Longest missing? Add squares. Short side missing? Subtract.", "Square root at the end."], examples: [ex("Easy: 3 and 4", "\u221A(9 + 16) = 5"), ex("Medium: 0.6 m and 0.8 m", "\u221A(0.36 + 0.64) = 1 m"), ex("Harder: c = 13, a = 5, find b", "b = \u221A(169 \u2212 25) = \u221A144 = 12")], mistakes: ["Adding when you should subtract.", "Forgetting the final square root."] },
+  graphs: { name: "Reading graphs and straight lines", why: "Pump curves, temperature trends and calibration charts.", formula: "y = m x + c", symbols: [["m", "Gradient (rise \xF7 run)"], ["c", "Where the line crosses the y-axis"]], rearrange: ["m = (y2 \u2212 y1) \xF7 (x2 \u2212 x1)", "x = (y \u2212 c) \xF7 m"], method: ["Read two clear points off the line.", "Rise = difference in y, run = difference in x.", "Gradient = rise \xF7 run, with units y per x."], examples: [ex("Easy: y = 3x + 2 at x = 4", "y = 12 + 2 = 14"), ex("Medium: (2, 10) to (6, 30)", "Rise 20, run 4", "m = 5"), ex("Harder: y = 4x + 6, find x when y = 30", "x = (30 \u2212 6) \xF7 4 = 6")], mistakes: ["Doing run \xF7 rise.", "Mixing up the order of points."] },
+  averages: { name: "Averages and range", why: "Trending machinery readings and spotting oddities.", formula: "Mean = total \xF7 number of values", symbols: [["Mean", "The usual 'average'"], ["Median", "Middle value when in order"], ["Mode", "Most common"], ["Range", "Highest \u2212 lowest"]], rearrange: ["Total = mean \xD7 number of values"], method: ["Add every value.", "Count them.", "Divide; round as asked."], examples: [ex("Easy: 4, 6, 8", "Mean = 18 \xF7 3 = 6"), ex("Medium: median of 7, 3, 9, 5, 4", "Order: 3, 4, 5, 7, 9", "Median = 5"), ex("Harder: mean of 4 readings is 80, three are 78, 82, 79", "Total = 320", "Fourth = 320 \u2212 239 = 81")], mistakes: ["Not putting values in order for the median.", "Dividing by the wrong count."] },
+  ma: { name: "Mechanical advantage and efficiency", why: "Chain blocks, levers, tackles and jacks.", formula: "MA = load \xF7 effort;  \u03B7 = MA \xF7 VR \xD7 100", symbols: [["MA", "Mechanical advantage (no units)"], ["VR", "Velocity ratio = effort distance \xF7 load distance"], ["\u03B7", "Efficiency (%)"]], rearrange: ["Effort = load \xF7 MA", "MA = \u03B7 \xD7 VR \xF7 100"], method: ["Work out MA from forces.", "Work out VR from distances (or rope falls).", "Efficiency = MA \xF7 VR \xD7 100."], examples: [ex("Easy: 1200 N load, 300 N effort", "MA = 4"), ex("Medium: MA 4, VR 5", "\u03B7 = 4 \xF7 5 \xD7 100 = 80%"), ex("Harder: VR 6, \u03B7 75%, load 3000 N, effort?", "MA = 0.75 \xD7 6 = 4.5", "Effort = 3000 \xF7 4.5 = 667 N")], mistakes: ["Giving MA units.", "Efficiency over 100% (MA can't beat VR)."] },
+  temp: { name: "Temperature conversions", why: "Kelvin for gas laws, Fahrenheit on older kit and manuals.", formula: "K = \xB0C + 273;  \xB0F = \xB0C \xD7 9/5 + 32", symbols: [["K", "Kelvin, starts at absolute zero"], ["9/5", "= 1.8"]], rearrange: ["\xB0C = K \u2212 273", "\xB0C = (\xB0F \u2212 32) \xD7 5/9"], method: ["Pick the formula.", "\xB0F to \xB0C: take off 32 first.", "Then multiply."], examples: [ex("Easy: 27 \xB0C to K", "27 + 273 = 300 K"), ex("Medium: 40 \xB0C to \xB0F", "40 \xD7 1.8 = 72; + 32 = 104 \xB0F"), ex("Harder: 212 \xB0F to \xB0C", "212 \u2212 32 = 180", "180 \xD7 5 \xF7 9 = 100 \xB0C")], mistakes: ["Multiplying before subtracting 32.", "Writing \xB0K (it's just K)."] },
+  flow: { name: "Flow rates", why: "Pumping, ballasting and transferring fuel.", formula: "Q = V \xF7 t;  Q = A \xD7 v", symbols: [["Q", "Flow rate (m\xB3/s or m\xB3/h)"], ["V", "Volume"], ["t", "Time"], ["A", "Pipe bore area (m\xB2)"], ["v", "Fluid velocity (m/s)"]], rearrange: ["t = V \xF7 Q", "v = Q \xF7 A"], method: ["Check the time units match (hours vs minutes).", "Use the right version of the formula.", "Convert at the end."], examples: [ex("Easy: 120 m\xB3 at 40 m\xB3/h", "t = 3 h"), ex("Medium: 30 m\xB3 at 20 m\xB3/h in minutes", "1.5 h \xD7 60 = 90 min"), ex("Harder: bore 0.1 m, v = 2 m/s", "A = \u03C0 \xD7 0.1\xB2 \xF7 4 = 0.00785 m\xB2", "Q = 0.00785 \xD7 2 = 0.0157 m\xB3/s")], mistakes: ["Mixing m\xB3/h with minutes.", "Using diameter as radius."] }
+};
+const KEYS = Object.keys(L);
+const split = (s) => s.split(/\. (?=[A-Z√])/).map((x) => x.trim()).filter((x) => x.length > 0);
+const check = (q, v) => {
+  var _a;
+  const n = parseFloat(v.replace(/,/g, "").replace(/\s/g, ""));
+  if (isNaN(n)) return false;
+  const tol = Math.max(Math.abs(q.ans) * ((_a = q.tol) != null ? _a : 5e-3), 0.011);
+  return Math.abs(n - q.ans) <= tol;
+};
+
+var PK="meMathsProg",S={mode:"learn",topic:"transpose",q:null,ans:"",res:"",hint:false,shown:0,quiz:[],qi:0,qs:0,qa:"",qr:""};
+var prog={};try{prog=JSON.parse(localStorage.getItem(PK)||"{}")}catch(e){}
+try{var st=JSON.parse(localStorage.getItem("meMathsUI")||"{}");if(st.mode)S.mode=st.mode;if(L[st.topic])S.topic=st.topic}catch(e){}
+S.q=G[S.topic]();
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function save(){try{localStorage.setItem(PK,JSON.stringify(prog));localStorage.setItem("meMathsUI",JSON.stringify({mode:S.mode,topic:S.topic}))}catch(e){}}
+function record(k,ok){var o=prog[k]||{a:0,c:0};prog[k]={a:o.a+1,c:o.c+(ok?1:0)};save()}
+function newQ(){S.q=G[S.topic]();S.ans="";S.res="";S.hint=false;S.shown=0}
+function steps(q){return["Method: "+q.hint].concat(split(q.sol))}
+function stepList(a){return'<ol class="steps">'+a.map(function(s){return"<li>"+esc(s)+"</li>"}).join("")+"</ol>"}
+function ol(a){return"<ol>"+a.map(function(s){return"<li>"+esc(s)+"</li>"}).join("")+"</ol>"}
+function unit(q){return q.unit?" ("+esc(q.unit)+")":""}
+function render(){var h="",l=L[S.topic];
+ h+='<nav>'+[["learn","1 Learn"],["practise","2 Practise"],["quiz","3 Quiz"],["progress","Progress"]].map(function(m){return'<button data-mode="'+m[0]+'" class="'+(S.mode===m[0]?"on":"")+'">'+m[1]+"</button>"}).join("")+"</nav>";
+ if(S.mode==="learn"||S.mode==="practise")h+='<label class="sel">Topic<select id="topic">'+KEYS.map(function(k){return'<option value="'+k+'"'+(k===S.topic?" selected":"")+">"+esc(L[k].name)+"</option>"}).join("")+"</select></label>";
+ if(S.mode==="learn"){h+='<section><h2>'+esc(l.name)+'</h2><p>'+esc(l.why)+'</p><div class="eq">'+esc(l.formula)+'</div></section>';
+  h+='<section><h3>What the symbols mean</h3><dl>'+l.symbols.map(function(s){return"<dt>"+esc(s[0])+"</dt><dd>"+esc(s[1])+"</dd>"}).join("")+"</dl></section>";
+  h+="<section><h3>How to rearrange it</h3>"+ol(l.rearrange)+"</section><section><h3>The method, every time</h3>"+ol(l.method)+"</section>";
+  h+="<section><h3>Worked examples (getting harder)</h3>"+l.examples.map(function(e){return'<div class="ex"><b>'+esc(e.t)+"</b>"+stepList(e.s)+"</div>"}).join("")+"</section>";
+  h+="<section><h3>Common mistakes to avoid</h3>"+ol(l.mistakes)+'</section><button class="pri" id="go">I\'m ready, let me practise</button>'}
+ if(S.mode==="practise"){var q=S.q,st=steps(q);h+='<section><h3>Practice question</h3><p class="q">'+esc(q.q)+'</p><label>Your answer'+unit(q)+'<input id="ans" inputmode="decimal" autocomplete="off" value="'+esc(S.ans)+'"></label><div class="row"><button class="pri" id="chk">Check answer</button><button id="hint">Hint</button><button id="step"'+(S.shown>=st.length?" disabled":"")+">"+(S.shown===0?"Show me step by step":S.shown<st.length?"Next step":"All steps shown")+'</button><button id="nq">New question</button></div>';
+  if(S.hint)h+='<div class="c info"><b>Hint</b> '+esc(q.hint)+"</div>";
+  if(S.res==="ok")h+='<div class="c ok"><b>Spot on!</b> Answer: '+esc(q.ans+" "+q.unit)+". Great work, try another.</div>";
+  if(S.res==="no")h+='<div class="c warn"><b>Not quite.</b> Have another go, or tap \'Show me step by step\' to see how it\'s done.</div>';
+  if(S.shown>0)h+=stepList(st.slice(0,S.shown));if(S.shown>=st.length)h+="<p><b>Final answer: "+esc(q.ans+" "+q.unit)+"</b></p>";h+="</section>"}
+ if(S.mode==="quiz"){var cur=S.quiz[S.qi];h+="<section><h3>Mixed quiz: 10 questions</h3>";
+  if(S.quiz.length&&!cur)h+='<div class="c ok"><b>You scored '+S.qs+" / "+S.quiz.length+"</b> "+(S.qs>=8?"Brilliant, you're exam ready on these!":S.qs>=5?"Good effort. Check Progress to see which topics to revisit.":"Keep going. Go back to Learn for the weaker topics, then try again.")+"</div>";
+  if(!cur)h+='<button class="pri" id="sq">'+(S.quiz.length?"Start a new quiz":"Start quiz")+"</button>";
+  else{h+='<p class="meta">Question '+(S.qi+1)+" of "+S.quiz.length+" · "+esc(L[cur.k].name)+" · Score "+S.qs+'</p><p class="q">'+esc(cur.q.q)+'</p><label>Your answer'+unit(cur.q)+'<input id="qa" inputmode="decimal" autocomplete="off" value="'+esc(S.qa)+'"'+(S.qr?" disabled":"")+"></label>";
+   if(!S.qr)h+='<button class="pri" id="qsub">Submit</button>';
+   if(S.qr==="ok")h+='<div class="c ok"><b>Correct!</b> '+esc(cur.q.ans+" "+cur.q.unit)+"</div>";
+   if(S.qr==="no")h+='<div class="c warn"><b>Not this time. Here\'s the working:</b>'+stepList(steps(cur.q))+"<p>Answer: "+esc(cur.q.ans+" "+cur.q.unit)+"</p></div>";
+   if(S.qr)h+='<button class="pri" id="qn">'+(S.qi+1<S.quiz.length?"Next question":"See my score")+"</button>"}
+  h+="</section>"}
+ if(S.mode==="progress"){h+="<section><h3>Your progress by topic</h3>";var any=KEYS.filter(function(k){return prog[k]});
+  h+=any.length?any.map(function(k){var p=Math.round(prog[k].c/prog[k].a*100);return'<div class="bar"><span>'+esc(L[k].name)+" <i>"+prog[k].c+" / "+prog[k].a+" · "+p+'%</i></span><div><b style="width:'+p+'%"></b></div></div>'}).join(""):"<p>Answer some practice or quiz questions and your scores will show here.</p>";
+  h+='<p class="meta">Saved on this phone, so it stays when you close the app. </p><button id="reset">Reset progress</button></section>'}
+ h+='<div class="c info about"><b>About these topics</b> Based on typical marine engineering maths (transposition, units, pressure, electrics, geometry and so on). The official LET(ME) syllabus isn\'t published, so check with your instructors for anything extra.</div>';
+ document.getElementById("app").innerHTML=h;bind()}
+function on(id,ev,f){var e=document.getElementById(id);if(e)e.addEventListener(ev,f)}
+function bind(){document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){S.mode=b.dataset.mode;save();render();scrollTo(0,0)}});
+ on("topic","change",function(e){S.topic=e.target.value;newQ();save();render()});
+ on("go","click",function(){newQ();S.mode="practise";save();render();scrollTo(0,0)});
+ on("ans","input",function(e){S.ans=e.target.value});
+ on("ans","keydown",function(e){if(e.key==="Enter")doChk()});
+ on("chk","click",doChk);on("hint","click",function(){S.hint=true;render()});
+ on("step","click",function(){S.shown++;render()});on("nq","click",function(){newQ();render()});
+ on("sq","click",function(){S.quiz=[];for(var i=0;i<10;i++){var k=KEYS[Math.floor(Math.random()*KEYS.length)];S.quiz.push({k:k,q:G[k]()})}S.qi=0;S.qs=0;S.qa="";S.qr="";render()});
+ on("qa","input",function(e){S.qa=e.target.value});on("qa","keydown",function(e){if(e.key==="Enter")doQ()});
+ on("qsub","click",doQ);on("qn","click",function(){S.qi++;S.qa="";S.qr="";render()});
+ on("reset","click",function(){if(confirm("Clear all progress?")){prog={};save();render()}})}
+function doChk(){if(!S.ans.trim())return;var ok=check(S.q,S.ans);S.res=ok?"ok":"no";record(S.topic,ok);render()}
+function doQ(){var it=S.quiz[S.qi];if(!it||!S.qa.trim()||S.qr)return;var ok=check(it.q,S.qa);S.qr=ok?"ok":"no";if(ok)S.qs++;record(it.k,ok);render()}
+render();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");
+</script></body></html>
